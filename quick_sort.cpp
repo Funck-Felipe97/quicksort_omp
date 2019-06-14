@@ -4,11 +4,11 @@
 #include <omp.h>
 
 #define TAMANHO_VETOR 200000
-#define NUMERO_THREADS 4
+#define NUMERO_THREADS 8
 #define LIMITE_PARALELO 1000
 
-void imprimir_vetor(int *vetor) {
-   for (int i = 0; i < TAMANHO_VETOR; ++i) {
+void imprimir_vetor(int *vetor, int tamanho) {
+   for (int i = 0; i < tamanho; ++i) {
        printf("%d ", vetor[i]);
     }
 }
@@ -87,26 +87,20 @@ void quick_paralelo(int *vetor, int inicio, int fim) {
 void teste_sequencial(int *vetor_sequencial) {
    clock_t tempo;
    printf("\n10 primeiros numeros sequencial desordenados: ");
-   for(int i = 0; i < 10; ++i) {
-      printf("%d ", vetor_sequencial[i]);
-   }
+   imprimir_vetor(vetor_sequencial, 10);
 
    tempo = clock();
    quick_sequencial(vetor_sequencial, 0, TAMANHO_VETOR - 1);
    printf("\nTempo sequencial: (%f) segundos\n", (clock() - tempo) / (double)CLOCKS_PER_SEC);
 
    printf("10 primeiros numeros sequencial ordenados: ");
-   for(int i = 0; i < 10; ++i) {
-      printf("%d ", vetor_sequencial[i]);
-   }
+   imprimir_vetor(vetor_sequencial, 10);
 }
 
 void teste_paralelo(int *vetor_paralelo) {
    clock_t tempo;
    printf("\n\n10 primeiros numeros paralelos desordenados: ");
-   for(int i = 0; i < 10; ++i) {
-      printf("%d ", vetor_paralelo[i]);
-   }
+   imprimir_vetor(vetor_paralelo, 10);
 
    tempo = clock();
     #pragma omp parallel num_threads(NUMERO_THREADS)
@@ -118,9 +112,7 @@ void teste_paralelo(int *vetor_paralelo) {
 		}
 	}
    printf("10 primeiros numeros paralelos ordenados: ");
-   for(int i = 0; i < 10; ++i) {
-      printf("%d ", vetor_paralelo[i]);
-   }	
+   imprimir_vetor(vetor_paralelo, 10);
    printf("\n");
 }
 
